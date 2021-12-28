@@ -1,0 +1,4 @@
+operativni
+sistemi
+aud2
+java
