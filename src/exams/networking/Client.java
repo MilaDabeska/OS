@@ -3,14 +3,15 @@ package exams.networking;
 import java.net.*;
 import java.io.*;
 
-public class TCPExample1 {
+public class Client {
     public static final String IP = "194.149.135.49";
     public static final int port = 9357;
 
     public static void main(String[] args) {
         try (Socket socket = new Socket(IP, port)) {
-            ClientReceive cr = new ClientReceive(socket);
-            ClientSend cs = new ClientSend(socket, "hello:193263");
+
+            ClientSend2 cs = new ClientSend2(socket, "hello:193263");
+            ClientReceive2 cr = new ClientReceive2(socket);
 
             cs.start();
             cr.start();
@@ -20,13 +21,14 @@ public class TCPExample1 {
             e.printStackTrace();
         }
     }
+
 }
 
-class ClientSend extends Thread {
+class ClientSend2 extends Thread {
     private final Socket socket;
     private final String message;
 
-    public ClientSend(Socket socket, String message) {
+    public ClientSend2(Socket socket, String message) {
         this.socket = socket;
         this.message = message;
     }
@@ -45,10 +47,11 @@ class ClientSend extends Thread {
     }
 }
 
-class ClientReceive extends Thread {
+class ClientReceive2 extends Thread {
+
     private final Socket socket;
 
-    public ClientReceive(Socket socket) {
+    public ClientReceive2(Socket socket) {
         this.socket = socket;
     }
 
@@ -60,14 +63,13 @@ class ClientReceive extends Thread {
             while (true) {
                 String str = in.readLine();
 
-                if (str == null) {
+                if (str == null)
                     continue;
-                }
 
                 System.out.println("Received: " + str);
 
                 if (str.equals("193263:hello")) {
-                    ClientSend csReceive = new ClientSend(socket, "193263:receive");
+                    ClientSend2 csReceive = new ClientSend2(socket, " 193263:receive");
                     csReceive.start();
                 }
 
@@ -108,8 +110,8 @@ class ClientReceive extends Thread {
                     System.exit(0);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException io) {
+            io.printStackTrace();
         }
     }
 }
