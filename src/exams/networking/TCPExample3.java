@@ -21,49 +21,48 @@ public class TCPExample3 extends Thread {
 
 
         try {
-            socket = new Socket(this.address, this.port);
+            socket = new Socket(address, port);
             pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             while (true) {
+                String string;
 
-                String inp;
                 pw.println("hello:193263");
                 pw.flush();
                 System.out.println("Sent: hello:193263");
 
-                inp = br.readLine();
-                System.out.println("Received: " + inp);
+                string = br.readLine();
+                System.out.println("Received: " + string);
 
-                if (inp.equals("193263:hello")) {
+                if (string.equals("193263:hello")) {
                     pw.println("193263:receive");
                     pw.flush();
 
                     System.out.println("Sent: 193263:receive");
 
-                    inp = br.readLine();
-                    System.out.println("Received: " + inp);
+                    string = br.readLine();
+                    System.out.println("Received: " + string);
                 }
-                if (inp.startsWith("193263:send")) {
-                    String[] strs = inp.split(":");
+                if (string.startsWith("193263:send")) {
+                    String[] lines = string.split(":");
 
-                    File f = new File(strs[2]);
-                    f.createNewFile();
-                    FileWriter fileWriter = new FileWriter(f);
+                    File file = new File(lines[2]);
+                    file.createNewFile();
+                    FileWriter fileWriter = new FileWriter(file);
 
                     while (true) {
                         String input = br.readLine();
 
                         if (input.equals("193263:over")) {
-                            System.out.println("Sent: 193263:size:" + f.length());
-                            pw.println("193263:size:" + f.length());
+                            System.out.println("Sent: 193263:size:" + file.length());
+                            pw.println("193263:size:" + file.length());
                             pw.flush();
 
                             System.out.println(br.readLine());
                             break;
                         }
-                        fileWriter.write(input);
-                        fileWriter.write("\n");
+                        fileWriter.write(input + "\n");
                         fileWriter.flush();
                     }
                 }

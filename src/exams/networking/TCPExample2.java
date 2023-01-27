@@ -107,7 +107,7 @@ class Receive extends Thread {
                 }
                 if (string.startsWith("Server: I received your calculated file size!")) {
                     System.out.println("SUCCESS!");
-                    System.exit(0);
+                    break;
                 }
             }
 
